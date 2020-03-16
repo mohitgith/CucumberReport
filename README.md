@@ -1,2 +1,2 @@
 # CucumberReport
-Generation Report using Selenium + Cucumber + TestNG
+Generating Report using Selenium + Cucumber + TestNG
