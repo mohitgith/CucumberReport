@@ -1,56 +1,30 @@
 package StepDefinition;
 
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.Assert;
+import com.aventstack.extentreports.GherkinKeyword;
+import ExtentConfig.Driver;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import static ExtentConfig.ExtentReportUtil.steps;
+import static ExtentConfig.ExtentReportUtil.scenarios;
 
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-
-public class CommonSteps {
-	public WebDriver driver = null;
-	Scenario scenario;
+public class CommonSteps extends Driver {
 	
-	@Before
-	public void testSetup(Scenario scenario) {
-		this.scenario = scenario;
-		System.out.println("Test Environment Setup");
-		System.out.println("======================");
-		System.out.println("Executing Scenario : " + scenario.getName());
-	}
+	public WebDriver driver;
 	
-	@After
-	public void tearDown(Scenario scenario) {
-		scenario.write("Finished Scenario");
-		
-		if(scenario.isFailed()) {
-			scenario.embed(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES), "image/png");
-		}
-		System.out.println("Test Environment Shut-Down");
-		System.out.println("==========================");
-	}
-	
-	@Given("Open the browser")
-	public void open_the_browser() {
-		System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
-		driver = new ChromeDriver();
+	@Given("Open Youtube")
+	public void open_Youtube() throws InterruptedException, ClassNotFoundException {
+		steps = scenarios.createNode(new GherkinKeyword("Given"), "Open Youtube");
+		driver = driverInitialization("chrome");
 		driver.manage().window().maximize();
-	}
-
-	@Then("Open Youtube and verify the title")
-	public void open_Youtube_and_verify_the_title() {
 		driver.get("https://www.youtube.com/");
-		String title = driver.getTitle();
-		Assert.assertEquals(title, "YouTube");
 	}
 
-	@Then("Close the browser")
-	public void close_the_browser() {
-		driver.close();
+	@Then("Verify the title")
+	public void verify_the_title() throws ClassNotFoundException {
+		steps = scenarios.createNode(new GherkinKeyword("Then"), "Verify the title");
+		driver.findElement(By.xpath("//*[contains(@href,'/feed/trending') and contains(@aria-label,'Trending')]")).click();
+		driver.quit();
 	}
 }

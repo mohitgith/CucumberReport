@@ -1,4 +1,4 @@
-@YouTubeTest
+@YouTubeTest1
 Feature: Youtube Test
 
 Scenario: Verify the YouTube title
